@@ -1,35 +1,45 @@
 ﻿@inject TodoClient Client
 
-<EditForm Model="@this" class="form-horizontal py-5" OnValidSubmit="@Login">
-    <DataAnnotationsValidator />
-    <div class="mb-3">
-        <label for="username" class="form-label">User name</label>
-        <InputText id="username" class="form-control" @bind-Value="Username" />
-        <ValidationMessage For="@(() => Username)" />
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="Password" />
-        <ValidationMessage For="@(() => Password)" />
-    </div>
-    <div>
-        <button class="btn btn-primary">Login</button>
-        <button type="button" class="btn btn-secondary" @onclick="@Create">Create User</button>
-    </div>
-</EditForm>
+<div class="bg-slate-100 min-h-screen flex items-center justify-center">
+    <div class="flex-1 mx-auto  container-sm md:container-md">
+        <div class="w-full shadow sm:rounded-lg border border-slate-200 bg-white flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <EditForm class="space-y-6" Model="@this" OnValidSubmit="@Login">
+                <DataAnnotationsValidator/>
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">User name</label>
+                    <ValidationMessage For="@(() => Username)"/>
+                    <WideInputText id="username" @bind-Value="Username"/>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <WideInputText id="password" type="password" @bind-Value="Password"/>
+                    <ValidationMessage For="@(() => Password)"/>
+                </div>
+                <div>
+                    <Button ButtonType="Button.Type.Primary" type="submit">Login</Button>
+                    <Button @onclick="@Create">Create User</Button>
+                </div>
+            </EditForm>
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger">@alertMessage</div>
-}
+            @if (!string.IsNullOrEmpty(alertMessage))
+            {
+                <div>@alertMessage</div>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     string? alertMessage;
 
-    [Required, StringLength(15)] public string? Username { get; set; }
-    [Required, StringLength(32, MinimumLength = 6)] public string? Password { get; set; }
+    [Required, StringLength(15)]
+    public string? Username { get; set; }
 
-    [Parameter] public EventCallback<string> OnLoggedIn { get; set; }
+    [Required, StringLength(32, MinimumLength = 6)]
+    public string? Password { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnLoggedIn { get; set; }
 
     async Task Login()
     {
@@ -56,4 +66,5 @@
             alertMessage = "Failed to create user";
         }
     }
+
 }

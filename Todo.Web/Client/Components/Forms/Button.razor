@@ -1,0 +1,71 @@
+﻿<button @onclick="@OnClick" @attributes="AdditionalAttributes" class="@ButtonTypeCss() justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 @CssClass">
+    @ChildContent
+</button>
+
+@code {
+
+    /// <summary>
+    /// Gets or sets the click callback.
+    /// </summary>
+    /// <value>The click callback.</value>
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter]
+    public Type ButtonType { get; set; } = Type.Secondary;
+
+    /// <summary>
+    /// Gets or sets the child content.
+    /// </summary>
+    /// <value>The child content.</value>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    private string ButtonTypeCss()
+    {
+        if (ButtonType == Type.Primary)
+        {
+            return Monorail.CssClass("bg-sky-500");
+        }
+
+        return Monorail.CssClass("bg-slate-500");
+    }
+
+    bool _clicking;
+
+    /// <summary>
+    /// Handles the <see cref="E:Click" /> event.
+    /// </summary>
+    /// <param name="args">The <see cref="MouseEventArgs"/> instance containing the event data.</param>
+    public async Task OnClick(MouseEventArgs args)
+    {
+        if (_clicking)
+        {
+            return;
+        }
+
+        try
+        {
+            _clicking = true;
+
+            await Click.InvokeAsync(args);
+        }
+        finally
+        {
+            _clicking = false;
+        }
+    }
+
+    public enum Type
+    {
+        Primary,
+        Secondary
+    }
+
+}
