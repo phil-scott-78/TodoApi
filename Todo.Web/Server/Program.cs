@@ -54,22 +54,6 @@ app.MapFallbackToPage("/_Host");
 // Configure the APIs
 app.MapAuth();
 app.MapTodos(todoUrl);
-app.MapGet("/styles.css", () =>
-{
-    var framework = new CssFramework(new CssFrameworkSettings()
-    {
-        Applies = new Dictionary<string, string>()
-        {
-            { "html", "font-sans" },
-            { "input.valid.modified:not([type=checkbox])", "ring-green-400 border-green-400" },
-            { "input.invalid", "ring-red-400 border-red-400" },
-            { "input.invalid:focus", "ring-red-400 border-red-400" },
-            { "#blazor-error-ui", "bg-yellow-100 text-yellow-900 hidden fixed bottom-0 left-0 w-full p-2"}
-        },
-    });
-    var css = framework.Process(Todo.Web.Client.Monorail.CssClassValues());
-    return Results.Text(css, "text/css", Encoding.Default);
-});
+app.MapMonorail();
 
 app.Run();
-

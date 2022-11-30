@@ -8,7 +8,7 @@
 }
 else
 {
-    <div class="mx-auto container md:container-md mt-4 px-1 sm:px-0 ">
+    <div class="mx-auto container md:container-md mt-4 px-1 md:px-0 ">
         <EditForm @ref="@form" Model="@this" OnValidSubmit="@AddTodo">
             <DataAnnotationsValidator />
             <div>
@@ -20,7 +20,7 @@ else
         <ul class="mt-4 divide-y divide-slate-100">
             @foreach (var todo in todos)
             {
-                <li @key="@todo.Id" class="flex flex-row py-1 sm:py-2">
+                <li @key="@todo.Id" class="flex flex-row py-1 md:py-2">
                     <input class="flex-initial mr-1" type="checkbox" value="" aria-label="..." />
                         <div class="flex-1">
                             @todo.Title
