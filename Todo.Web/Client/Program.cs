@@ -1,7 +1,9 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Todo.Web.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddHttpClient<TodoClient>(client =>
 {

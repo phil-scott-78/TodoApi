@@ -1,10 +1,16 @@
 ﻿@inject TodoClient Client
-
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 @if (!string.IsNullOrEmpty(CurrentUser))
 {
-    <NavBar CurrentUser="@CurrentUser" LoggedOut="@Logout" />
-    <TodoList OnForbidden="@Logout" />
+    <div class="min-h-screen flex flex-col transition-colors @IsDarkCssClass">
+        <div class="flex-initial">
+            <NavBar DarkMode="@_isDarkMode" CurrentUser="@CurrentUser" LoggedOut="@Logout" DarkModeChanged="DarkModeChanged" />
+        </div>
+        <div class="flex-1">
+            <TodoList OnForbidden="@Logout" />    
+        </div>
+    </div>
 }
 else
 {
@@ -12,6 +18,9 @@ else
 }
 @code {
     [Parameter] public string? CurrentUser { get; set; }
+
+    string? IsDarkCssClass => _isDarkMode ? "dark" : null;
+    bool _isDarkMode;
 
     void HandleLogin(string newUsername)
     {
@@ -25,4 +34,16 @@ else
             CurrentUser = null;
         }
     }
+
+    private async Task DarkModeChanged()
+    {
+        _isDarkMode = !_isDarkMode;
+        await LocalStorage.SetItemAsync("darkMode", _isDarkMode);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isDarkMode = await LocalStorage.GetItemAsync<bool>("darkMode");
+    }
+
 }
